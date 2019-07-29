@@ -8,12 +8,18 @@
 
 import UIKit
 
+private let dataKey = "TodoItems"
+
 class TodoListViewController: UITableViewController {
     var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
+    let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        if let items = defaults.array(forKey: dataKey) as? [String]{
+            itemArray = items
+        }
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -39,6 +45,7 @@ class TodoListViewController: UITableViewController {
             guard let todoText = alert.textFields?[0].text
                 else{ fatalError("Todo text was unavailable") }
             self.itemArray.append(todoText)
+            self.defaults.set(self.itemArray, forKey: dataKey)
             self.tableView.reloadData()
         })
         
