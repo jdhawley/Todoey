@@ -9,7 +9,7 @@
 import UIKit
 
 class TodoListViewController: UITableViewController {
-    let itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
+    var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +30,25 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         toggleComplete(indexPath: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    @IBAction func addButtonPressed(_ sender: Any) {
+        let alert = UIAlertController(title: "Add Todo", message: "Please enter your todo item below.", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
+            guard let todoText = alert.textFields?[0].text
+                else{ fatalError("Todo text was unavailable") }
+            self.itemArray.append(todoText)
+            self.tableView.reloadData()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        alert.addTextField { (textField) in
+            textField.placeholder = "Todo Item"
+        }
+        
+        present(alert, animated: true, completion: nil)
     }
     
     private func toggleComplete(indexPath: IndexPath){
