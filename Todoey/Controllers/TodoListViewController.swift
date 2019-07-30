@@ -13,20 +13,12 @@ private let dataKey = "TodoItems"
 class TodoListViewController: UITableViewController {
     var itemArray = [TodoItem]()
     let dataFilepath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("TodoList.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadItems()
-        
-//        if let items = defaults.array(forKey: dataKey) as? [TodoItem]{
-//            itemArray = items
-//        }
-//        else{
-//            itemArray.append(TodoItem(todoText: "Find Mike"))
-//            itemArray.append(TodoItem(todoText: "Buy Eggos"))
-//            itemArray.append(TodoItem(todoText: "Destroy Demogorgon"))
-//        }
+//        loadItems()
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -54,7 +46,11 @@ class TodoListViewController: UITableViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
             guard let todoText = alert.textFields?[0].text
                 else{ fatalError("Todo text was unavailable") }
-            self.itemArray.append(TodoItem(todoText: todoText))
+            
+            let item = TodoItem(context: self.context)
+            item.todoText = todoText
+            item.isComplete = false
+            self.itemArray.append(item)
             
             self.saveData()
             
@@ -81,23 +77,21 @@ class TodoListViewController: UITableViewController {
     }
     
     private func saveData(){
-        let encoder = PropertyListEncoder()
         do{
-            let data = try encoder.encode(itemArray)
-            try data.write(to: dataFilepath!)
+            try context.save()
         } catch{
-            print("Error encoding itemArray: \(error)")
+            print("Error saving context: \(error)")
         }
     }
     
-    private func loadItems(){
-        if let data = try? Data(contentsOf: dataFilepath!){
-            let decoder = PropertyListDecoder()
-            do{
-                itemArray = try decoder.decode([TodoItem].self, from: data)
-            } catch{
-                print("Error decoding!")
-            }
-        }
-    }
+//    private func loadItems(){
+//        if let data = try? Data(contentsOf: dataFilepath!){
+//            let decoder = PropertyListDecoder()
+//            do{
+//                itemArray = try decoder.decode([TodoItem].self, from: data)
+//            } catch{
+//                print("Error decoding!")
+//            }
+//        }
+//    }
 }
