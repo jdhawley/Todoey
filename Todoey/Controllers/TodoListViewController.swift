@@ -39,6 +39,7 @@ class TodoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         toggleComplete(indexPath: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
+        tableView.reloadData()
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
@@ -68,13 +69,16 @@ class TodoListViewController: UITableViewController {
     }
     
     private func toggleComplete(indexPath: IndexPath){
-        guard let cell = tableView.cellForRow(at: indexPath) else{ fatalError("IndexPath out of range") }
+//        guard let cell = tableView.cellForRow(at: indexPath) else{ fatalError("IndexPath out of range") }
         let todo = itemArray[indexPath.row]
         
-        todo.isComplete = !todo.isComplete
+//        todo.isComplete = !todo.isComplete
+        itemArray.remove(at: indexPath.row)
+        context.delete(todo)
+        
         saveData()
         
-        cell.accessoryType = cell.accessoryType == .none ? .checkmark : .none
+//        cell.accessoryType = cell.accessoryType == .none ? .checkmark : .none
     }
     
     private func saveData(){
