@@ -9,17 +9,15 @@
 import UIKit
 import CoreData
 
-private let dataKey = "TodoItems"
-
 class TodoListViewController: UITableViewController {
+    var parentCategory: Category?
     var itemArray = [TodoItem]()
-    let dataFilepath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("TodoList.plist")
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadItems()
+        loadItems(forCategory: parentCategory!.categoryName!)
     }
 
     //MARK: TableView Delegate methods
@@ -54,6 +52,7 @@ class TodoListViewController: UITableViewController {
             let item = TodoItem(context: self.context)
             item.todoText = todoText
             item.isComplete = false
+            item.parentCategory = self.parentCategory
             self.itemArray.append(item)
             
             self.saveData()
@@ -90,6 +89,13 @@ class TodoListViewController: UITableViewController {
         } catch{
             print("Error saving context: \(error)")
         }
+    }
+    
+    private func loadItems(forCategory categoryName: String){
+        let request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
+        request.predicate = NSPredicate(format: "ANY parentCategory.categoryName == %@", categoryName)
+        
+        loadItems(withRequest: request)
     }
     
     private func loadItems(withRequest request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()){
