@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 private let dataKey = "TodoItems"
 
@@ -18,7 +19,7 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        loadItems()
+        loadItems()
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -84,14 +85,12 @@ class TodoListViewController: UITableViewController {
         }
     }
     
-//    private func loadItems(){
-//        if let data = try? Data(contentsOf: dataFilepath!){
-//            let decoder = PropertyListDecoder()
-//            do{
-//                itemArray = try decoder.decode([TodoItem].self, from: data)
-//            } catch{
-//                print("Error decoding!")
-//            }
-//        }
-//    }
+    private func loadItems(){
+        let request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
+        do{
+            itemArray = try context.fetch(request)
+        } catch{
+            print("Error fetching data from context: \(error)")
+        }
+    }
 }
