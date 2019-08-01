@@ -7,13 +7,14 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryTableViewController: UITableViewController {
     
     var categoryItems = [Category]()
     var selectedCategory: Category?
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,11 +69,11 @@ class CategoryTableViewController: UITableViewController {
                 fatalError("Category name text was unavailable")
             }
             
-            let newCategory = Category(context: self.context)
+            let newCategory = Category()
             newCategory.categoryName = newCategoryName
             
             self.categoryItems.append(newCategory)
-            self.saveCategories()
+            self.save(category: newCategory)
         }))
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -81,18 +82,21 @@ class CategoryTableViewController: UITableViewController {
     }
     
     //MARK: Private Methods
-    private func loadCategories(withRequest request: NSFetchRequest<Category> = Category.fetchRequest()){
-        
-        do{
-            categoryItems = try context.fetch(request)
-        } catch{
-            print("Error reading categories: \(error)")
-        }
+    private func loadCategories(){
+//        let request: NSFetchRequest<Category> = Category.fetchRequest()
+//
+//        do{
+//            categoryItems = try context.fetch(request)
+//        } catch{
+//            print("Error reading categories: \(error)")
+//        }
     }
     
-    private func saveCategories(){
+    private func save(category: Category){
         do{
-            try context.save()
+            try realm.write {
+                realm.add(category)
+            }
         } catch{
             print("Error saving categories: \(error)")
         }

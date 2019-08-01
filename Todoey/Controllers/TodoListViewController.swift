@@ -17,7 +17,7 @@ class TodoListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadItems(forCategory: parentCategory!.categoryName!)
+//        loadItems(forCategory: parentCategory!.categoryName!)
     }
 
     //MARK: TableView Delegate methods
@@ -48,12 +48,12 @@ class TodoListViewController: UITableViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default) { (_) in
             guard let todoText = alert.textFields?[0].text
                 else{ fatalError("Todo text was unavailable") }
-            
-            let item = TodoItem(context: self.context)
-            item.todoText = todoText
-            item.isComplete = false
-            item.parentCategory = self.parentCategory
-            self.itemArray.append(item)
+//
+//            let item = TodoItem(context: self.context)
+//            item.todoText = todoText
+//            item.isComplete = false
+//            item.parentCategory = self.parentCategory
+//            self.itemArray.append(item)
             
             self.saveData()
             
@@ -89,43 +89,43 @@ class TodoListViewController: UITableViewController {
         }
     }
     
-    private func loadItems(forCategory categoryName: String){
-        let request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
-        request.predicate = NSPredicate(format: "ANY parentCategory.categoryName == %@", categoryName)
-        
-        loadItems(withRequest: request)
-    }
-    
-    private func loadItems(withRequest request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()){
-        do{
-            itemArray = try context.fetch(request)
-        } catch{
-            print("Error fetching data from context: \(error)")
-        }
-        
-        tableView.reloadData()
-    }
+//    private func loadItems(forCategory categoryName: String){
+//        let request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
+//        request.predicate = NSPredicate(format: "ANY parentCategory.categoryName == %@", categoryName)
+//
+//        loadItems(withRequest: request)
+//    }
+//
+//    private func loadItems(withRequest request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()){
+//        do{
+//            itemArray = try context.fetch(request)
+//        } catch{
+//            print("Error fetching data from context: \(error)")
+//        }
+//
+//        tableView.reloadData()
+//    }
 }
 
-extension TodoListViewController: UISearchBarDelegate{
-    
-    //MARK: SearchBar Delegate Methods
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        let request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
-        
-        request.predicate = NSPredicate(format: "todoText CONTAINS[cd] %@", searchBar.text ?? "")
-        request.sortDescriptors = [NSSortDescriptor(key: "todoText", ascending: true)]
-        
-        loadItems(withRequest: request)
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if (searchBar.text ?? "").count == 0{
-            loadItems(forCategory: parentCategory!.categoryName!)
-            
-            DispatchQueue.main.async {
-                searchBar.resignFirstResponder()
-            }
-        }
-    }
-}
+//extension TodoListViewController: UISearchBarDelegate{
+//
+//    //MARK: SearchBar Delegate Methods
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        let request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
+//
+//        request.predicate = NSPredicate(format: "todoText CONTAINS[cd] %@", searchBar.text ?? "")
+//        request.sortDescriptors = [NSSortDescriptor(key: "todoText", ascending: true)]
+//
+//        loadItems(withRequest: request)
+//    }
+//
+//    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+//        if (searchBar.text ?? "").count == 0{
+//            loadItems(forCategory: parentCategory!.categoryName!)
+//
+//            DispatchQueue.main.async {
+//                searchBar.resignFirstResponder()
+//            }
+//        }
+//    }
+//}
