@@ -71,16 +71,14 @@ class TodoListViewController: UITableViewController {
     
     //MARK: Private Functions
     private func toggleComplete(indexPath: IndexPath){
-//        guard let cell = tableView.cellForRow(at: indexPath) else{ fatalError("IndexPath out of range") }
+        guard let cell = tableView.cellForRow(at: indexPath) else{ fatalError("IndexPath out of range") }
         let todo = itemArray[indexPath.row]
         
-//        todo.isComplete = !todo.isComplete
-        itemArray.remove(at: indexPath.row)
-        context.delete(todo)
+        todo.isComplete = !todo.isComplete
         
         saveData()
         
-//        cell.accessoryType = cell.accessoryType == .none ? .checkmark : .none
+        cell.accessoryType = cell.accessoryType == .none ? .checkmark : .none
     }
     
     private func saveData(){
@@ -123,7 +121,7 @@ extension TodoListViewController: UISearchBarDelegate{
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if (searchBar.text ?? "").count == 0{
-            loadItems()
+            loadItems(forCategory: parentCategory!.categoryName!)
             
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()

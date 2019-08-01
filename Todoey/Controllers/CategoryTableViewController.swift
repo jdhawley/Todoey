@@ -12,7 +12,7 @@ import CoreData
 class CategoryTableViewController: UITableViewController {
     
     var categoryItems = [Category]()
-    var selectedCategory = Category()
+    var selectedCategory: Category?
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
