@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import SwipeCellKit
 
 class CategoryTableViewController: UITableViewController {
     
@@ -31,7 +32,9 @@ class CategoryTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath) as! SwipeTableViewCell
+        
+        cell.delegate = self
         
         let categoryName = categoryItems?[indexPath.row].categoryName ?? "No categories added yet"
         cell.textLabel?.text = categoryName
@@ -94,4 +97,36 @@ class CategoryTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+}
+
+//MARK: - Swipe Cell Delegate Methods
+extension CategoryTableViewController: SwipeTableViewCellDelegate{
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        
+        guard orientation == .right else{ return nil }
+        
+        let deleteAction = SwipeAction(style: .destructive, title: nil) {
+            (action, indexPath) in
+            
+            if let category = self.categoryItems?[indexPath.row]{
+                do{
+                    try self.realm.write {
+                        self.realm.delete(category)
+                    }
+                } catch{
+                    print("Error deleting category \(category): \(error)")
+                }
+            }
+        }
+        
+        deleteAction.image = UIImage(named: "delete")
+        
+        return [deleteAction]
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = .destructive
+        return options
+    }
 }
