@@ -43,7 +43,8 @@ class TodoListViewController: UITableViewController {
         if let todo = todoItems?[indexPath.row], let cell = tableView.cellForRow(at: indexPath){
             do{
                 try realm.write {
-                    todo.isComplete = !todo.isComplete
+//                    todo.isComplete = !todo.isComplete
+                    realm.delete(todo)
                 }
             } catch{
                 print("Error saving todo done status: \(error)")
