@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class CategoryTableViewController: SwipeTableViewController {
     
@@ -18,6 +19,14 @@ class CategoryTableViewController: SwipeTableViewController {
         super.viewDidLoad()
 
         loadCategories()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let color = UIColor.flatSkyBlue
+        navigationController?.navigationBar.barTintColor = color
+        navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+        navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)]
+        
     }
 
     // MARK: UITableView
@@ -32,8 +41,11 @@ class CategoryTableViewController: SwipeTableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        guard let category = categoryItems?[indexPath.row] else{ fatalError("IndexPath out of range.") }
         
-        cell.textLabel?.text = categoryItems?[indexPath.row].categoryName ?? "No categories added yet"
+        cell.textLabel?.text = category.categoryName
+        cell.backgroundColor = UIColor(hexString: category.backgroundColor)
+        cell.textLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn: cell.backgroundColor!, isFlat: true)
         
         return cell
     }
@@ -67,6 +79,7 @@ class CategoryTableViewController: SwipeTableViewController {
             
             let newCategory = Category()
             newCategory.categoryName = newCategoryName
+            newCategory.backgroundColor = UIColor.randomFlat.hexValue()
             
             self.save(category: newCategory)
         }))

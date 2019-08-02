@@ -15,10 +15,22 @@ class TodoListViewController: SwipeTableViewController {
     var todoItems: Results<TodoItem>?
     var parentCategory: Category?
     
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         loadItems()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let color = UIColor(hexString: parentCategory!.backgroundColor){
+            navigationController?.navigationBar.barTintColor = color
+            navigationController?.navigationBar.tintColor = UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)
+            title = parentCategory!.categoryName
+            searchBar.barTintColor = color
+            navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(contrastingBlackOrWhiteColorOn: color, isFlat: true)]
+        }
     }
 
     //MARK: TableView Delegate methods
@@ -28,6 +40,9 @@ class TodoListViewController: SwipeTableViewController {
         if let todo = todoItems?[indexPath.row]{
             cell.textLabel?.text = todo.todoText
             cell.accessoryType = todo.isComplete ? .checkmark : .none
+//            cell.backgroundColor = UIColor(hexString: todo.backgroundColor)
+            cell.backgroundColor = UIColor(hexString: parentCategory!.backgroundColor)!.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(todoItems!.count))
+            cell.textLabel?.textColor = UIColor(contrastingBlackOrWhiteColorOn: cell.backgroundColor!, isFlat: true)
         }else{
             cell.textLabel?.text = "No items added"
         }
@@ -68,6 +83,7 @@ class TodoListViewController: SwipeTableViewController {
                     try self.realm.write {
                         let item = TodoItem()
                         item.todoText = todoText
+                        item.backgroundColor = UIColor.randomFlat.hexValue()
                         currentCategory.todoItems.append(item)
                     }
                 } catch{
