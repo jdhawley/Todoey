@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class TodoListViewController: UITableViewController {
+class TodoListViewController: SwipeTableViewController {
     let realm = try! Realm()
     
     var todoItems: Results<TodoItem>?
@@ -23,14 +23,15 @@ class TodoListViewController: UITableViewController {
 
     //MARK: TableView Delegate methods
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "TodoItemCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
+        
         if let todo = todoItems?[indexPath.row]{
             cell.textLabel?.text = todo.todoText
             cell.accessoryType = todo.isComplete ? .checkmark : .none
         }else{
             cell.textLabel?.text = "No items added"
         }
-        
+
         return cell
     }
 
@@ -90,6 +91,19 @@ class TodoListViewController: UITableViewController {
         todoItems = parentCategory?.todoItems.sorted(byKeyPath: "todoText", ascending: true)
         tableView.reloadData()
     }
+    
+    //MARK: Delete from Swipe
+    override func updateModel(at indexPath: IndexPath) {
+        if let todo = todoItems?[indexPath.row]{
+            do{
+                try realm.write {
+                    realm.delete(todo)
+                }
+            } catch{
+                print("Error deleting category \(todo): \(error)")
+            }
+        }
+    }
 }
 
 extension TodoListViewController: UISearchBarDelegate{
@@ -100,13 +114,6 @@ extension TodoListViewController: UISearchBarDelegate{
         todoItems = todoItems?.filter("todoText CONTAINS[cd] %@", searchBar.text ?? "").sorted(byKeyPath: "dateCreated", ascending: true)
         
         tableView.reloadData()
-        
-//        let request: NSFetchRequest<TodoItem> = TodoItem.fetchRequest()
-//
-//        request.predicate = NSPredicate(format: "todoText CONTAINS[cd] %@", searchBar.text ?? "")
-//        request.sortDescriptors = [NSSortDescriptor(key: "todoText", ascending: true)]
-//
-//        loadItems(withRequest: request)
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

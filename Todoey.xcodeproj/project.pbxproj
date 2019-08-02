@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0119945922F491A800BB9138 /* SwipeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0119945822F491A800BB9138 /* SwipeTableViewController.swift */; };
 		01399E7022F0AA86009F3547 /* CategoryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01399E6F22F0AA86009F3547 /* CategoryTableViewController.swift */; };
 		019D669F22E9FA3700834EE6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019D669E22E9FA3700834EE6 /* AppDelegate.swift */; };
 		019D66A122E9FA3700834EE6 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019D66A022E9FA3700834EE6 /* TodoListViewController.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0119945822F491A800BB9138 /* SwipeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeTableViewController.swift; sourceTree = "<group>"; };
 		01399E6F22F0AA86009F3547 /* CategoryTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewController.swift; sourceTree = "<group>"; };
 		019D669B22E9FA3700834EE6 /* Todoey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Todoey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		019D669E22E9FA3700834EE6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				019D669E22E9FA3700834EE6 /* AppDelegate.swift */,
+				0119945822F491A800BB9138 /* SwipeTableViewController.swift */,
 				01399E6F22F0AA86009F3547 /* CategoryTableViewController.swift */,
 				019D66A022E9FA3700834EE6 /* TodoListViewController.swift */,
 			);
@@ -248,6 +251,7 @@
 				01CBBA1422F373A400E846C2 /* Category.swift in Sources */,
 				019D669F22E9FA3700834EE6 /* AppDelegate.swift in Sources */,
 				01CBBA1622F373AA00E846C2 /* TodoItem.swift in Sources */,
+				0119945922F491A800BB9138 /* SwipeTableViewController.swift in Sources */,
 				01399E7022F0AA86009F3547 /* CategoryTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
