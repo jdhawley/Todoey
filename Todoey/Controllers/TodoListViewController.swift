@@ -39,7 +39,17 @@ class TodoListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        toggleComplete(indexPath: indexPath)
+        
+        if let todo = todoItems?[indexPath.row], let cell = tableView.cellForRow(at: indexPath){
+            do{
+                try realm.write {
+                    todo.isComplete = !todo.isComplete
+                }
+            } catch{
+                print("Error saving todo done status: \(error)")
+            }
+        }
+        
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
     }
@@ -74,17 +84,6 @@ class TodoListViewController: UITableViewController {
         }
         
         present(alert, animated: true, completion: nil)
-    }
-    
-    //MARK: Private Functions
-    private func toggleComplete(indexPath: IndexPath){
-        guard let cell = tableView.cellForRow(at: indexPath) else{ fatalError("IndexPath out of range") }
-
-        if let todo = todoItems?[indexPath.row]{
-            todo.isComplete = !todo.isComplete
-        }
-        
-        cell.accessoryType = cell.accessoryType == .none ? .checkmark : .none
     }
     
     private func loadItems(){
