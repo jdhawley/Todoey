@@ -40,6 +40,7 @@ class CategoryTableViewController: SwipeTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         guard let category = categoryItems?[indexPath.row] else{ fatalError("IndexPath out of range.") }
         

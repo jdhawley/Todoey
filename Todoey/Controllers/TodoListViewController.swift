@@ -10,6 +10,7 @@ import UIKit
 import RealmSwift
 
 class TodoListViewController: SwipeTableViewController {
+
     let realm = try! Realm()
     
     var todoItems: Results<TodoItem>?
@@ -36,7 +37,7 @@ class TodoListViewController: SwipeTableViewController {
     //MARK: TableView Delegate methods
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        
+
         if let todo = todoItems?[indexPath.row]{
             cell.textLabel?.text = todo.todoText
             cell.accessoryType = todo.isComplete ? .checkmark : .none
@@ -84,6 +85,7 @@ class TodoListViewController: SwipeTableViewController {
                         let item = TodoItem()
                         item.todoText = todoText
                         item.backgroundColor = UIColor.randomFlat.hexValue()
+
                         currentCategory.todoItems.append(item)
                     }
                 } catch{
